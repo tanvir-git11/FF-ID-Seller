@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FF ID Seller - User Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for neumorphism and animations */
+        .card {
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .dark .card:hover {
+            box-shadow: 0 10px 20px rgba(255,255,255,0.1);
+        }
+        /* Neumorphism style */
+        .neumorphic {
+            background: linear-gradient(145deg, #f0f0f0, #cacaca);
+            box-shadow:  5px 5px 10px #bebebe, -5px -5px 10px #ffffff;
+        }
+        .dark .neumorphic {
+            background: linear-gradient(145deg, #2d2d2d, #1a1a1a);
+            box-shadow: 5px 5px 10px #0d0d0d, -5px -5px 10px #313131;
+        }
+        /* Button animations */
+        button {
+            transition: all 0.2s ease;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+        button:active {
+            transform: scale(0.95);
+        }
+        /* Modal */
+        #modal {
+            transition: opacity 0.3s ease;
+        }
+        /* bKash style mimic */
+        #modal input[type="text"], #modal input[type="password"] {
+            font-size: 1rem;
+            letter-spacing: 0.03em;
+        }
+        #modal label {
+            font-size: 0.98rem;
+        }
+        #modal .select-none {
+            user-select: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen flex flex-col">
+    <!-- Navigation Bar -->
+    <nav class="bg-white dark:bg-gray-800 shadow-md p-4 flex justify-between items-center">
+        <div class="flex items-center">
+            <span class="font-bold text-xl">FF ID Seller</span>
+        </div>
+        <div class="flex items-center space-x-4">
+        </div>
+    </nav>
+
+    <!-- Main Section -->
+    <main class="flex-grow container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Cards will be generated here -->
+    </main>
+
+
+    <script>
+        // Permanent dark mode
+
+        // Card data
+        const cardsData = [
+            { id: 1, image: 'img/photo_2025-07-31_22-38-27.jpg', desc: 'Premium ID', price: '৳5' },
+            { id: 2, image: 'img/photo_2025-07-31_22-38-28 (2).jpg', desc: 'Elite ID', price: '৳10' },
+            { id: 3, image: 'img/photo_2025-07-31_22-38-28.jpg', desc: 'Pro ID', price: '৳15' },
+            { id: 4, image: 'img/photo_2025-07-31_22-38-29 (2).jpg', desc: 'Ultimate ID', price: '৳67' },
+            { id: 5, image: 'img/photo_2025-07-31_22-38-29.jpg', desc: 'Basic ID', price: '৳20' },
+            { id: 6, image: 'img/photo_2025-07-31_22-38-30.jpg', desc: 'Advanced ID', price: '৳30' }
+        ];
+
+        // Function to create card
+        function createCard(data) {
+            const card = document.createElement('div');
+            card.className = 'card neumorphic rounded-lg overflow-hidden shadow-lg';
+            card.innerHTML = `
+                <img src="${data.image}" alt="Free Fire ID" class="w-full h-auto object-contain md:object-cover">
+                <div class="p-4">
+                    <p class="text-sm mb-2">${data.desc}</p>
+                    <p class="font-bold text-lg mb-2">${data.price}</p>
+                    <button class="buy-btn bg-green-500 text-white px-4 py-2 rounded w-full" data-price="${data.price}">Buy Now</button>
+                </div>
+            `;
+            return card;
+        }
+
+        // Generate cards
+        const main = document.querySelector('main');
+        cardsData.forEach(data => main.appendChild(createCard(data)));
+
+        <!-- Email Modal -->
+    </script>
+    <!-- Email Modal -->
+    <div id="email-modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-2xl p-6 w-full max-w-sm transform scale-95 transition-transform duration-300">
+            <h2 class="text-xl font-bold mb-2 text-center">আপনার মেইল দিন</h2>
+            <p class="text-sm mb-4 text-center">মেইল দিন, তারপর পেমেন্ট করুন। পেমেন্ট করার পর আপনার মেইলে আইডি ও পাসওয়ার্ড (জিমেইল পাসওয়ার্ড সহ) পাঠানো হবে।</p>
+            <input type="email" id="user-email" placeholder="example@gmail.com" class="w-full p-2 mb-4 border border-pink-200 rounded bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#e2136e]">
+            <div id="email-error" class="text-red-500 text-xs mb-2 text-center hidden"></div>
+            <button id="proceed-payment" class="w-full py-2 rounded bg-[#e2136e] text-white font-bold tracking-wide mb-2">পেমেন্ট করুন</button>
+            <button id="close-email-modal" class="w-full py-2 rounded bg-gray-200 text-gray-700 font-semibold">বন্ধ করুন</button>
+        </div>
+    </div>
+    <script>
+        let selectedPrice = null;
+        document.querySelectorAll('.buy-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                selectedPrice = btn.getAttribute('data-price').replace('৳','');
+                document.getElementById('email-modal').classList.remove('opacity-0','pointer-events-none');
+                document.getElementById('email-modal').classList.add('opacity-100');
+                document.getElementById('email-modal').style.pointerEvents = 'auto';
+                document.getElementById('user-email').value = '';
+                document.getElementById('email-error').classList.add('hidden');
+            });
+        });
+        document.getElementById('close-email-modal').onclick = function() {
+            document.getElementById('email-modal').classList.add('opacity-0','pointer-events-none');
+            document.getElementById('email-modal').classList.remove('opacity-100');
+            document.getElementById('email-modal').style.pointerEvents = 'none';
+        };
+        document.getElementById('proceed-payment').onclick = function() {
+            const email = document.getElementById('user-email').value.trim();
+            const errorDiv = document.getElementById('email-error');
+            if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
+                errorDiv.textContent = 'সঠিক মেইল দিন';
+                errorDiv.classList.remove('hidden');
+                return;
+            }
+            errorDiv.classList.add('hidden');
+            document.getElementById('email-modal').classList.add('opacity-0','pointer-events-none');
+            document.getElementById('email-modal').classList.remove('opacity-100');
+            document.getElementById('email-modal').style.pointerEvents = 'none';
+            // Redirect to payment.html with amount and email
+            window.location.href = 'payment.html?amount=' + encodeURIComponent(selectedPrice) + '&email=' + encodeURIComponent(email);
+        };
+    </script>
+</body>
+</html>
